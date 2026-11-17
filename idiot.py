@@ -14,7 +14,10 @@ import sys
 import tempfile
 import tkinter as tk
 import wave
-from tkinter import messagebox
+from tkinter import messagebox, simpledialog
+
+PASSWORD = "I AM NOT FINISHED"
+PUNISH_MS = 600000        # 10 minutes of giant text on a wrong password
 
 TEXT = "YOU ARE AN IDIOT!"
 BUTTON = "STOP IT"
@@ -137,9 +140,53 @@ class IdiotWindow:
             pass
 
 
+def punish(root):
+    """Wrong password: giant text on the whole screen for 10 minutes."""
+    start_music()
+    big = tk.Toplevel(root)
+    big.attributes("-fullscreen", True)
+    big.attributes("-topmost", True)
+    big.configure(bg="#ff0000", cursor="none")
+    big.protocol("WM_DELETE_WINDOW", lambda: None)
+    sw = big.winfo_screenwidth()
+    label = tk.Label(big, text=TEXT, font=("Impact", max(60, sw // 9), "bold"),
+                     bg="#ff0000", fg="#ffff00", wraplength=sw - 40)
+    label.pack(expand=True, fill="both")
+    big.focus_force()
+
+    def end(_event=None):
+        stop_music()
+        big.destroy()
+        root.bell()
+        messagebox.showerror("ERROR", FREE_MSG, parent=root)
+        root.destroy()
+
+    def flash(on=True):
+        if not big.winfo_exists():
+            return
+        bg, fg = ("#ff0000", "#ffff00") if on else ("#ffff00", "#ff0000")
+        big.configure(bg=bg)
+        label.configure(bg=bg, fg=fg)
+        big.after(400, flash, not on)
+
+    flash()
+    big.bind("<Control-Shift-Q>", end)       # emergency exit
+    big.after(PUNISH_MS, end)
+
+
+def ask_password(root):
+    answer = simpledialog.askstring("PASSWORD", "Enter the password:", show="*", parent=root)
+    return answer is not None and answer.strip().upper() == PASSWORD
+
+
 def main():
     root = tk.Tk()
     root.withdraw()
+    root.attributes("-topmost", True)
+    if not ask_password(root):
+        punish(root)
+        root.mainloop()
+        return
     windows = []
     finished = {"done": False}
 

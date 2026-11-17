@@ -6,6 +6,10 @@ Opens a pile of flashing, shaking windows with **YOU ARE AN IDIOT!**.
 The **STOP IT** button does nothing. After 2 minutes everything closes
 by itself and an error appears: *you are free this time....*
 
+## Password
+
+At start you must enter `I AM NOT FINISHED`. Wrong password (or Cancel) = giant fullscreen YOU ARE AN IDIOT! for 10 minutes. Right password = the window prank.
+
 ## Run
 
 ```bash

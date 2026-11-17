@@ -3,7 +3,7 @@
 Harmless prank in Python (tkinter only, no dependencies).
 
 Opens a pile of flashing, shaking windows with **YOU ARE AN IDIOT!**.
-The **STOP IT** button does nothing. After ~14 seconds everything closes
+The **STOP IT** button does nothing. After 2 minutes everything closes
 by itself and an error appears: *you are free this time....*
 
 ## Run
